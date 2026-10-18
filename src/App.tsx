@@ -38,7 +38,6 @@ import type {
 } from './components/AdminPanel';
 import { VideoEmbed } from './components/VideoEmbed';
 import { CommerceLogosShowcase } from './components/CommerceLogosShowcase';
-import { SolutionsSegmentsCarousel } from './components/SolutionsSegmentsCarousel';
 import {
   ArrowRight,
   Check,
@@ -939,36 +938,39 @@ export default function App() {
 
         {/* 3. SOLUÇÕES */}
         {activePage === 'solucoes' && (
-          <section className="flex-1 py-16 sm:py-20 bg-[#F8F8F6]">
-            <div className="max-w-[1200px] mx-auto px-6">
-              {/* Banner Carrossel na PARTE SUPERIOR da aba Soluções */}
-              <SolutionsSegmentsCarousel
-                onOpenWhatsApp={(msg) => {
-                  window.open(buildDynamicWhatsAppUrl(msg), '_blank');
-                }}
-                onSelectSegment={(segKey) => {
-                  const targetSol = displayedSolutions.find(
-                    (s) => s.key === segKey || s.id.toLowerCase().includes(segKey.toLowerCase())
-                  );
-                  if (targetSol) {
-                    setActivePreviewSolutionId(targetSol.id);
-                  }
-                }}
-              />
-
-              <div className="text-center max-w-2xl mx-auto mb-12 pt-2">
-                <p className="text-xs font-semibold text-blue-700 mb-2">
-                  NOSSAS SOLUÇÕES SOB MEDIDA
-                </p>
-                <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-slate-900">
+          <section className="flex-1 bg-[radial-gradient(circle_at_top,_rgba(59,130,246,0.10),_transparent_28%),_#F4F7FB] py-12 sm:py-16">
+            <div className="mx-auto max-w-[1200px] px-4 sm:px-6">
+              <div className="mx-auto mb-8 max-w-3xl text-center">
+                <span className="inline-flex items-center rounded-full border border-blue-200 bg-blue-50 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.22em] text-blue-700">
+                  Nossas soluções sob medida
+                </span>
+                <h2 className="mt-4 text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl">
                   O sistema ideal para o seu segmento comercial
                 </h2>
-                <p className="mt-3 text-sm sm:text-base text-slate-600">
+                <p className="mt-3 text-sm text-slate-600 sm:text-base">
                   Projetos desenvolvidos para agilizar o atendimento e aumentar o lucro do seu negócio.
                 </p>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              <div className="mb-10 grid gap-4 sm:grid-cols-3">
+                {[
+                  { label: 'Atendimento', value: 'mais rápido' },
+                  { label: 'Controle', value: '100% digital' },
+                  { label: 'Suporte', value: 'humano e próximo' }
+                ].map((stat) => (
+                  <div
+                    key={stat.label}
+                    className="rounded-2xl border border-slate-200 bg-white/85 px-5 py-4 text-center shadow-[0_10px_22px_rgba(15,23,42,0.04)] backdrop-blur-sm"
+                  >
+                    <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-500">
+                      {stat.label}
+                    </p>
+                    <p className="mt-2 text-lg font-bold text-slate-900">{stat.value}</p>
+                  </div>
+                ))}
+              </div>
+
+              <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:gap-8">
                 {displayedSolutions.map((item) => {
                   const highlights = [item.highlight1, item.highlight2, item.highlight3].filter(
                     (h) => h && h.trim().length > 0
@@ -976,7 +978,7 @@ export default function App() {
                   return (
                     <article
                       key={item.id}
-                      className="bg-white border border-slate-200 rounded-xl overflow-hidden flex flex-col justify-between hover:border-slate-300 transition-colors"
+                      className="group flex flex-col justify-between overflow-hidden rounded-[26px] border border-slate-200 bg-white shadow-[0_14px_35px_rgba(15,23,42,0.07)] transition-all duration-300 hover:-translate-y-1 hover:border-blue-200 hover:shadow-[0_22px_50px_rgba(37,99,235,0.12)]"
                     >
                       <div>
                         <div
@@ -988,7 +990,7 @@ export default function App() {
                               imageUrl: item.imageUrl
                             })
                           }
-                          className="group relative aspect-4/3 w-full bg-slate-900 overflow-hidden border-b border-slate-200 cursor-zoom-in"
+                          className="group relative aspect-[4/3] w-full overflow-hidden bg-slate-900 cursor-zoom-in"
                         >
                           {!failedImages[item.id] && item.imageUrl ? (
                             <img
@@ -996,14 +998,14 @@ export default function App() {
                               alt={item.title}
                               referrerPolicy="no-referrer"
                               onError={() => handleImgError(item.id)}
-                              className="w-full h-full object-cover object-center transition-transform duration-300 group-hover:scale-[1.03]"
+                              className="h-full w-full object-cover object-center transition-transform duration-500 group-hover:scale-[1.04]"
                             />
                           ) : (
-                            <div className="w-full h-full flex items-center justify-center bg-slate-800 text-white p-6">
-                              <span className="font-bold text-lg">{item.title}</span>
+                            <div className="flex h-full w-full items-center justify-center bg-slate-800 p-6 text-white">
+                              <span className="text-lg font-bold">{item.title}</span>
                             </div>
                           )}
-                          <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/20 to-transparent pointer-events-none" />
+                          <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/50 to-transparent" />
                           <button
                             type="button"
                             onClick={(e) => {
@@ -1016,28 +1018,32 @@ export default function App() {
                                 });
                               }
                             }}
-                            className="absolute top-3 right-3 px-2.5 py-1.5 bg-slate-950/75 hover:bg-slate-950 text-white text-[11px] font-semibold rounded-lg border border-white/20 inline-flex items-center gap-1.5 backdrop-blur-xs cursor-pointer"
+                            className="absolute right-3 top-3 inline-flex items-center gap-1.5 rounded-full border border-white/15 bg-slate-950/65 px-2.5 py-1.5 text-[10px] font-semibold text-white backdrop-blur-sm transition-colors hover:bg-slate-950"
                           >
-                            <ZoomIn className="w-3.5 h-3.5 text-blue-300" />
-                            <span>Ampliar Foto</span>
+                            <ZoomIn className="h-3.5 w-3.5 text-blue-300" />
+                            <span>Ampliar</span>
                           </button>
                           <div className="absolute bottom-4 left-5 right-5 text-white pointer-events-none">
-                            <span className="text-xs text-blue-200 block">{item.subtitle}</span>
-                            <h3 className="text-xl sm:text-2xl font-bold leading-snug">
+                            <span className="block text-[10px] font-semibold uppercase tracking-[0.20em] text-blue-200">
+                              {item.subtitle}
+                            </span>
+                            <h3 className="mt-2 text-xl font-bold leading-snug sm:text-2xl">
                               {item.title}
                             </h3>
                           </div>
                         </div>
 
-                        <div className="p-6 space-y-4">
-                          <p className="text-sm text-slate-700 font-medium leading-relaxed">
+                        <div className="space-y-4 p-5 sm:p-6">
+                          <p className="text-sm font-medium leading-relaxed text-slate-700">
                             {item.shortDescription}
                           </p>
 
-                          <ul className="space-y-2 text-xs text-slate-600">
+                          <ul className="space-y-2.5 text-xs text-slate-600">
                             {highlights.map((hl, idx) => (
-                              <li key={idx} className="flex items-center gap-2">
-                                <Check className="w-3.5 h-3.5 text-blue-700 shrink-0" />
+                              <li key={idx} className="flex items-center gap-2.5">
+                                <span className="flex h-5 w-5 items-center justify-center rounded-full bg-blue-50">
+                                  <Check className="h-3.5 w-3.5 text-blue-700 shrink-0" />
+                                </span>
                                 <span>{hl}</span>
                               </li>
                             ))}
@@ -1051,12 +1057,12 @@ export default function App() {
                         </div>
                       </div>
 
-                      <div className="px-6 py-4 bg-slate-50 border-t border-slate-200/80 flex items-center justify-between gap-3">
+                      <div className="flex flex-col gap-3 border-t border-slate-200/80 bg-slate-50 px-5 py-4 sm:flex-row sm:items-center sm:justify-between sm:px-6">
                         {item.demoItems ? (
                           <button
                             type="button"
                             onClick={() => setActivePreviewSolutionId(item.id)}
-                            className="px-3.5 py-2 text-xs font-semibold text-slate-800 bg-white border border-slate-300 rounded-lg hover:bg-slate-100 transition-colors whitespace-nowrap cursor-pointer"
+                            className="inline-flex items-center justify-center rounded-lg border border-slate-300 bg-white px-3.5 py-2 text-xs font-semibold text-slate-800 transition-colors hover:bg-slate-100"
                           >
                             Ver Exemplo da Tela
                           </button>
@@ -1071,19 +1077,19 @@ export default function App() {
                                 imageUrl: item.imageUrl
                               })
                             }
-                            className="px-3.5 py-2 text-xs font-semibold text-slate-800 bg-white border border-slate-300 rounded-lg hover:bg-slate-100 transition-colors whitespace-nowrap cursor-pointer inline-flex items-center gap-1.5"
+                            className="inline-flex items-center justify-center gap-1.5 rounded-lg border border-slate-300 bg-white px-3.5 py-2 text-xs font-semibold text-slate-800 transition-colors hover:bg-slate-100"
                           >
-                            <ZoomIn className="w-3.5 h-3.5 text-blue-700" />
+                            <ZoomIn className="h-3.5 w-3.5 text-blue-700" />
                             <span>Ampliar Imagem</span>
                           </button>
                         )}
                         <button
                           type="button"
                           onClick={() => handleChooseSolution(item.title)}
-                          className="px-4 py-2 text-xs font-semibold text-white bg-blue-700 hover:bg-blue-800 rounded-lg transition-colors flex items-center gap-1.5 whitespace-nowrap cursor-pointer"
+                          className="inline-flex items-center justify-center gap-1.5 rounded-lg bg-blue-700 px-4 py-2.5 text-xs font-semibold text-white transition-colors hover:bg-blue-800"
                         >
                           <span>Quero no Meu Negócio</span>
-                          <ArrowRight className="w-3.5 h-3.5" />
+                          <ArrowRight className="h-3.5 w-3.5" />
                         </button>
                       </div>
                     </article>
