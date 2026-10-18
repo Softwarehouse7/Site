@@ -1,0 +1,410 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // 1. Global Safety Net
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // 2. Hardened Global Helpers
+    function isValidId(id) {
+      return id is string && id.size() >= 1 && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    function incoming() {
+      return request.resource.data;
+    }
+
+    function existing() {
+      return resource.data;
+    }
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isVerifiedUser() {
+      return isSignedIn() && request.auth.token.email_verified == true;
+    }
+
+    function isAdmin() {
+      return isVerifiedUser() && (
+        exists(/databases/$(database)/documents/admins/$(request.auth.uid)) ||
+        request.auth.token.email == "microedi7@gmail.com" ||
+        request.auth.token.email == "house7software@gmail.com"
+      );
+    }
+
+    // 3. Entity Validation Blueprints
+    function isValidSiteConfig(data) {
+      return data.keys().hasAll([
+        'brandName',
+        'bannerSubtitle',
+        'bannerDescription',
+        'bannerImageUrl',
+        'bannerVideoUrl',
+        'homeSectionKicker',
+        'homeSectionTitle',
+        'homeSectionIntro',
+        'aboutKicker',
+        'aboutTitle',
+        'aboutDescription',
+        'aboutImageUrl',
+        'aboutVideoUrl',
+        'aboutBullet1',
+        'aboutBullet2',
+        'aboutBullet3',
+        'contactPhone',
+        'contactEmail',
+        'whatsappNumber',
+        'authorId',
+        'createdAt',
+        'updatedAt'
+      ]) &&
+      data.keys().hasOnly([
+        'brandName',
+        'bannerSubtitle',
+        'bannerDescription',
+        'bannerImageUrl',
+        'bannerVideoUrl',
+        'homeSectionKicker',
+        'homeSectionTitle',
+        'homeSectionIntro',
+        'aboutKicker',
+        'aboutTitle',
+        'aboutDescription',
+        'aboutImageUrl',
+        'aboutVideoUrl',
+        'aboutBullet1',
+        'aboutBullet2',
+        'aboutBullet3',
+        'contactPhone',
+        'contactEmail',
+        'whatsappNumber',
+        'authorId',
+        'createdAt',
+        'updatedAt'
+      ]) &&
+      data.brandName is string && data.brandName.size() >= 1 && data.brandName.size() <= 80 &&
+      data.bannerSubtitle is string && data.bannerSubtitle.size() >= 1 && data.bannerSubtitle.size() <= 120 &&
+      data.bannerDescription is string && data.bannerDescription.size() >= 1 && data.bannerDescription.size() <= 400 &&
+      data.bannerImageUrl is string && data.bannerImageUrl.size() <= 450000 &&
+      data.bannerVideoUrl is string && data.bannerVideoUrl.size() <= 2000 &&
+      data.homeSectionKicker is string && data.homeSectionKicker.size() >= 1 && data.homeSectionKicker.size() <= 120 &&
+      data.homeSectionTitle is string && data.homeSectionTitle.size() >= 1 && data.homeSectionTitle.size() <= 160 &&
+      data.homeSectionIntro is string && data.homeSectionIntro.size() >= 1 && data.homeSectionIntro.size() <= 800 &&
+      data.aboutKicker is string && data.aboutKicker.size() >= 1 && data.aboutKicker.size() <= 120 &&
+      data.aboutTitle is string && data.aboutTitle.size() >= 1 && data.aboutTitle.size() <= 200 &&
+      data.aboutDescription is string && data.aboutDescription.size() >= 1 && data.aboutDescription.size() <= 1000 &&
+      data.aboutImageUrl is string && data.aboutImageUrl.size() <= 450000 &&
+      data.aboutVideoUrl is string && data.aboutVideoUrl.size() <= 2000 &&
+      data.aboutBullet1 is string && data.aboutBullet1.size() >= 1 && data.aboutBullet1.size() <= 240 &&
+      data.aboutBullet2 is string && data.aboutBullet2.size() >= 1 && data.aboutBullet2.size() <= 240 &&
+      data.aboutBullet3 is string && data.aboutBullet3.size() >= 1 && data.aboutBullet3.size() <= 240 &&
+      data.contactPhone is string && data.contactPhone.size() >= 1 && data.contactPhone.size() <= 60 &&
+      data.contactEmail is string && data.contactEmail.size() >= 3 && data.contactEmail.size() <= 120 &&
+      data.whatsappNumber is string && data.whatsappNumber.size() >= 8 && data.whatsappNumber.size() <= 30 && data.whatsappNumber.matches('^[0-9]+$') &&
+      data.authorId is string && data.authorId.size() >= 1 && data.authorId.size() <= 128 && data.authorId.matches('^[a-zA-Z0-9_\\-]+$') &&
+      data.authorId == request.auth.uid &&
+      data.createdAt is timestamp &&
+      data.updatedAt is timestamp;
+    }
+
+    function isValidSolutionItem(data) {
+      return data.keys().hasAll([
+        'title',
+        'subtitle',
+        'shortDescription',
+        'imageUrl',
+        'videoUrl',
+        'highlight1',
+        'highlight2',
+        'highlight3',
+        'isPublished',
+        'orderIndex',
+        'authorId',
+        'createdAt',
+        'updatedAt'
+      ]) &&
+      data.keys().hasOnly([
+        'title',
+        'subtitle',
+        'shortDescription',
+        'imageUrl',
+        'videoUrl',
+        'highlight1',
+        'highlight2',
+        'highlight3',
+        'isPublished',
+        'orderIndex',
+        'authorId',
+        'createdAt',
+        'updatedAt'
+      ]) &&
+      data.title is string && data.title.size() >= 1 && data.title.size() <= 120 &&
+      data.subtitle is string && data.subtitle.size() >= 1 && data.subtitle.size() <= 120 &&
+      data.shortDescription is string && data.shortDescription.size() >= 1 && data.shortDescription.size() <= 500 &&
+      data.imageUrl is string && data.imageUrl.size() <= 450000 &&
+      data.videoUrl is string && data.videoUrl.size() <= 2000 &&
+      data.highlight1 is string && data.highlight1.size() >= 1 && data.highlight1.size() <= 200 &&
+      data.highlight2 is string && data.highlight2.size() <= 200 &&
+      data.highlight3 is string && data.highlight3.size() <= 200 &&
+      data.isPublished is bool &&
+      data.orderIndex is number && data.orderIndex >= 0 && data.orderIndex <= 1000 &&
+      data.authorId is string && data.authorId.size() >= 1 && data.authorId.size() <= 128 && data.authorId.matches('^[a-zA-Z0-9_\\-]+$') &&
+      data.authorId == request.auth.uid &&
+      data.createdAt is timestamp &&
+      data.updatedAt is timestamp;
+    }
+
+    function isValidCustomPage(data) {
+      return data.keys().hasAll([
+        'menuLabel',
+        'title',
+        'subtitle',
+        'content',
+        'imageUrl',
+        'videoUrl',
+        'isPublished',
+        'orderIndex',
+        'authorId',
+        'createdAt',
+        'updatedAt'
+      ]) &&
+      data.keys().hasOnly([
+        'menuLabel',
+        'title',
+        'subtitle',
+        'content',
+        'imageUrl',
+        'videoUrl',
+        'isPublished',
+        'orderIndex',
+        'authorId',
+        'createdAt',
+        'updatedAt'
+      ]) &&
+      data.menuLabel is string && data.menuLabel.size() >= 1 && data.menuLabel.size() <= 40 &&
+      data.title is string && data.title.size() >= 1 && data.title.size() <= 160 &&
+      data.subtitle is string && data.subtitle.size() <= 240 &&
+      data.content is string && data.content.size() >= 1 && data.content.size() <= 5000 &&
+      data.imageUrl is string && data.imageUrl.size() <= 450000 &&
+      data.videoUrl is string && data.videoUrl.size() <= 2000 &&
+      data.isPublished is bool &&
+      data.orderIndex is number && data.orderIndex >= 0 && data.orderIndex <= 1000 &&
+      data.authorId is string && data.authorId.size() >= 1 && data.authorId.size() <= 128 && data.authorId.matches('^[a-zA-Z0-9_\\-]+$') &&
+      data.authorId == request.auth.uid &&
+      data.createdAt is timestamp &&
+      data.updatedAt is timestamp;
+    }
+
+    function isValidAdminMember(data) {
+      return data.keys().hasAll(['uid', 'createdAt']) &&
+        data.keys().hasOnly(['uid', 'createdAt']) &&
+        data.uid is string && data.uid.size() >= 1 && data.uid.size() <= 128 && data.uid.matches('^[a-zA-Z0-9_\\-]+$') &&
+        data.createdAt is timestamp;
+    }
+
+    function isValidChatFaq(data) {
+      return data.keys().hasAll([
+        'question',
+        'keywords',
+        'answer',
+        'category',
+        'isPublished',
+        'orderIndex',
+        'authorId',
+        'createdAt',
+        'updatedAt'
+      ]) &&
+      data.keys().hasOnly([
+        'question',
+        'keywords',
+        'answer',
+        'category',
+        'isPublished',
+        'orderIndex',
+        'authorId',
+        'createdAt',
+        'updatedAt'
+      ]) &&
+      data.question is string && data.question.size() >= 1 && data.question.size() <= 160 &&
+      data.keywords is string && data.keywords.size() <= 240 &&
+      data.answer is string && data.answer.size() >= 1 && data.answer.size() <= 1500 &&
+      data.category is string && data.category.size() >= 1 && data.category.size() <= 60 &&
+      data.isPublished is bool &&
+      data.orderIndex is number && data.orderIndex >= 0 && data.orderIndex <= 1000 &&
+      data.authorId is string && data.authorId.size() >= 1 && data.authorId.size() <= 128 && data.authorId.matches('^[a-zA-Z0-9_\\-]+$') &&
+      data.authorId == request.auth.uid &&
+      data.createdAt is timestamp &&
+      data.updatedAt is timestamp;
+    }
+
+    function isValidContactLead(data) {
+      return data.keys().hasAll([
+        'name',
+        'company',
+        'phone',
+        'segment',
+        'message',
+        'status',
+        'createdAt',
+        'updatedAt'
+      ]) &&
+      data.keys().hasOnly([
+        'name',
+        'company',
+        'phone',
+        'segment',
+        'message',
+        'status',
+        'createdAt',
+        'updatedAt'
+      ]) &&
+      data.name is string && data.name.size() >= 1 && data.name.size() <= 120 &&
+      data.company is string && data.company.size() >= 1 && data.company.size() <= 120 &&
+      data.phone is string && data.phone.size() >= 8 && data.phone.size() <= 40 &&
+      data.segment is string && data.segment.size() >= 1 && data.segment.size() <= 80 &&
+      data.message is string && data.message.size() <= 600 &&
+      data.status is string && data.status.size() >= 1 && data.status.size() <= 20 &&
+      (data.status == 'novo' || data.status == 'atendido') &&
+      data.createdAt is timestamp &&
+      data.updatedAt is timestamp;
+    }
+
+    // 4. Collection Rules
+    match /site_config/{configId} {
+      allow get: if isValidId(configId);
+      allow create: if isSignedIn() && isValidId(configId) && isValidSiteConfig(incoming()) && isAdmin() &&
+        incoming().createdAt == request.time &&
+        incoming().updatedAt == request.time;
+      allow update: if isSignedIn() && isValidId(configId) && isValidSiteConfig(incoming()) && isAdmin() &&
+        incoming().createdAt == existing().createdAt &&
+        incoming().authorId == existing().authorId &&
+        incoming().updatedAt == request.time &&
+        incoming().diff(existing()).affectedKeys().hasOnly([
+          'brandName',
+          'bannerSubtitle',
+          'bannerDescription',
+          'bannerImageUrl',
+          'bannerVideoUrl',
+          'homeSectionKicker',
+          'homeSectionTitle',
+          'homeSectionIntro',
+          'aboutKicker',
+          'aboutTitle',
+          'aboutDescription',
+          'aboutImageUrl',
+          'aboutVideoUrl',
+          'aboutBullet1',
+          'aboutBullet2',
+          'aboutBullet3',
+          'contactPhone',
+          'contactEmail',
+          'whatsappNumber',
+          'updatedAt'
+        ]);
+      allow delete: if isSignedIn() && isValidId(configId) && isAdmin();
+    }
+
+    match /solutions/{solutionId} {
+      allow get: if isValidId(solutionId) && (existing().isPublished == true || isAdmin());
+      allow list: if existing().isPublished == true || isAdmin();
+      allow create: if isSignedIn() && isValidId(solutionId) && isValidSolutionItem(incoming()) && isAdmin() &&
+        incoming().createdAt == request.time &&
+        incoming().updatedAt == request.time;
+      allow update: if isSignedIn() && isValidId(solutionId) && isValidSolutionItem(incoming()) && isAdmin() &&
+        incoming().createdAt == existing().createdAt &&
+        incoming().authorId == existing().authorId &&
+        incoming().updatedAt == request.time &&
+        incoming().diff(existing()).affectedKeys().hasOnly([
+          'title',
+          'subtitle',
+          'shortDescription',
+          'imageUrl',
+          'videoUrl',
+          'highlight1',
+          'highlight2',
+          'highlight3',
+          'isPublished',
+          'orderIndex',
+          'updatedAt'
+        ]);
+      allow delete: if isSignedIn() && isValidId(solutionId) && isAdmin();
+    }
+
+    match /custom_pages/{pageId} {
+      allow get: if isValidId(pageId) && (existing().isPublished == true || isAdmin());
+      allow list: if existing().isPublished == true || isAdmin();
+      allow create: if isSignedIn() && isValidId(pageId) && isValidCustomPage(incoming()) && isAdmin() &&
+        incoming().createdAt == request.time &&
+        incoming().updatedAt == request.time;
+      allow update: if isSignedIn() && isValidId(pageId) && isValidCustomPage(incoming()) && isAdmin() &&
+        incoming().createdAt == existing().createdAt &&
+        incoming().authorId == existing().authorId &&
+        incoming().updatedAt == request.time &&
+        incoming().diff(existing()).affectedKeys().hasOnly([
+          'menuLabel',
+          'title',
+          'subtitle',
+          'content',
+          'imageUrl',
+          'videoUrl',
+          'isPublished',
+          'orderIndex',
+          'updatedAt'
+        ]);
+      allow delete: if isSignedIn() && isValidId(pageId) && isAdmin();
+    }
+
+    match /admins/{adminId} {
+      allow get: if isSignedIn() && isValidId(adminId) && (request.auth.uid == adminId || isAdmin());
+      allow create: if isSignedIn() && isValidId(adminId) && isValidAdminMember(incoming()) && isAdmin() &&
+        incoming().uid == adminId &&
+        incoming().createdAt == request.time;
+      allow delete: if isSignedIn() && isValidId(adminId) && isAdmin();
+    }
+
+    match /chat_faqs/{faqId} {
+      allow get: if isValidId(faqId) && (existing().isPublished == true || isAdmin());
+      allow list: if existing().isPublished == true || isAdmin();
+      allow create: if isSignedIn() && isValidId(faqId) && isValidChatFaq(incoming()) && isAdmin() &&
+        incoming().createdAt == request.time &&
+        incoming().updatedAt == request.time;
+      allow update: if isSignedIn() && isValidId(faqId) && isValidChatFaq(incoming()) && isAdmin() &&
+        incoming().createdAt == existing().createdAt &&
+        incoming().authorId == existing().authorId &&
+        incoming().updatedAt == request.time &&
+        incoming().diff(existing()).affectedKeys().hasOnly([
+          'question',
+          'keywords',
+          'answer',
+          'category',
+          'isPublished',
+          'orderIndex',
+          'updatedAt'
+        ]);
+      allow delete: if isSignedIn() && isValidId(faqId) && isAdmin();
+    }
+
+    match /contact_leads/{leadId} {
+      allow get: if isSignedIn() && isValidId(leadId) && isAdmin();
+      allow list: if isSignedIn() && isAdmin();
+      allow create: if isValidId(leadId) && isValidContactLead(incoming()) &&
+        incoming().status == 'novo' &&
+        incoming().createdAt == request.time &&
+        incoming().updatedAt == request.time;
+      allow update: if isSignedIn() && isValidId(leadId) && isValidContactLead(incoming()) && isAdmin() &&
+        incoming().name == existing().name &&
+        incoming().company == existing().company &&
+        incoming().phone == existing().phone &&
+        incoming().segment == existing().segment &&
+        incoming().message == existing().message &&
+        incoming().createdAt == existing().createdAt &&
+        incoming().updatedAt == request.time &&
+        incoming().diff(existing()).affectedKeys().hasOnly(['status', 'updatedAt']);
+      allow delete: if isSignedIn() && isValidId(leadId) && isAdmin();
+    }
+  }
+}

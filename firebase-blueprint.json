@@ -1,0 +1,507 @@
+{
+  "entities": {
+    "SiteConfig": {
+      "title": "SiteConfig",
+      "description": "Global site configuration and customizable content for Home, Quem Somos, and Contato sections.",
+      "type": "object",
+      "properties": {
+        "brandName": {
+          "type": "string",
+          "description": "Company brand name displayed in header and banner.",
+          "minLength": 1,
+          "maxLength": 80
+        },
+        "bannerSubtitle": {
+          "type": "string",
+          "description": "Subtitle phrase below the brand name in the banner.",
+          "minLength": 1,
+          "maxLength": 120
+        },
+        "bannerDescription": {
+          "type": "string",
+          "description": "Short introductory text inside the main banner.",
+          "minLength": 1,
+          "maxLength": 400
+        },
+        "bannerImageUrl": {
+          "type": "string",
+          "description": "Banner background image URL or compressed Data URL uploaded from computer.",
+          "maxLength": 450000
+        },
+        "bannerVideoUrl": {
+          "type": "string",
+          "description": "Optional video URL to display in the Home page.",
+          "maxLength": 2000
+        },
+        "homeSectionKicker": {
+          "type": "string",
+          "description": "Kicker label above Home benefits title.",
+          "minLength": 1,
+          "maxLength": 120
+        },
+        "homeSectionTitle": {
+          "type": "string",
+          "description": "Main title of the Home benefits section.",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "homeSectionIntro": {
+          "type": "string",
+          "description": "Introductory paragraph for the Home benefits section.",
+          "minLength": 1,
+          "maxLength": 800
+        },
+        "aboutKicker": {
+          "type": "string",
+          "description": "Kicker text on the Quem Somos page.",
+          "minLength": 1,
+          "maxLength": 120
+        },
+        "aboutTitle": {
+          "type": "string",
+          "description": "Main heading on the Quem Somos page.",
+          "minLength": 1,
+          "maxLength": 200
+        },
+        "aboutDescription": {
+          "type": "string",
+          "description": "Main paragraph on the Quem Somos page.",
+          "minLength": 1,
+          "maxLength": 1000
+        },
+        "aboutImageUrl": {
+          "type": "string",
+          "description": "Photo URL or compressed Data URL displayed on the Quem Somos page.",
+          "maxLength": 450000
+        },
+        "aboutVideoUrl": {
+          "type": "string",
+          "description": "Optional video URL displayed on the Quem Somos page.",
+          "maxLength": 2000
+        },
+        "aboutBullet1": {
+          "type": "string",
+          "description": "First highlight bullet on Quem Somos.",
+          "minLength": 1,
+          "maxLength": 240
+        },
+        "aboutBullet2": {
+          "type": "string",
+          "description": "Second highlight bullet on Quem Somos.",
+          "minLength": 1,
+          "maxLength": 240
+        },
+        "aboutBullet3": {
+          "type": "string",
+          "description": "Third highlight bullet on Quem Somos.",
+          "minLength": 1,
+          "maxLength": 240
+        },
+        "contactPhone": {
+          "type": "string",
+          "description": "Formatted commercial phone/WhatsApp displayed in Contato.",
+          "minLength": 1,
+          "maxLength": 60
+        },
+        "contactEmail": {
+          "type": "string",
+          "description": "Commercial contact email displayed in Contato.",
+          "minLength": 3,
+          "maxLength": 120
+        },
+        "whatsappNumber": {
+          "type": "string",
+          "description": "Numeric WhatsApp phone number with country code.",
+          "minLength": 8,
+          "maxLength": 30,
+          "pattern": "^[0-9]+$"
+        },
+        "authorId": {
+          "type": "string",
+          "description": "UID of the administrator who created/updated the config.",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Creation server timestamp."
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Last update server timestamp."
+        }
+      },
+      "required": [
+        "brandName",
+        "bannerSubtitle",
+        "bannerDescription",
+        "bannerImageUrl",
+        "bannerVideoUrl",
+        "homeSectionKicker",
+        "homeSectionTitle",
+        "homeSectionIntro",
+        "aboutKicker",
+        "aboutTitle",
+        "aboutDescription",
+        "aboutImageUrl",
+        "aboutVideoUrl",
+        "aboutBullet1",
+        "aboutBullet2",
+        "aboutBullet3",
+        "contactPhone",
+        "contactEmail",
+        "whatsappNumber",
+        "authorId",
+        "createdAt",
+        "updatedAt"
+      ]
+    },
+    "SolutionItem": {
+      "title": "SolutionItem",
+      "description": "A commercial solution card displayed in the SOLUÇÕES page.",
+      "type": "object",
+      "properties": {
+        "title": {
+          "type": "string",
+          "description": "Solution title (e.g., Lojas de Roupas & Moda).",
+          "minLength": 1,
+          "maxLength": 120
+        },
+        "subtitle": {
+          "type": "string",
+          "description": "Short subtitle of segments covered.",
+          "minLength": 1,
+          "maxLength": 120
+        },
+        "shortDescription": {
+          "type": "string",
+          "description": "Concise description of the solution.",
+          "minLength": 1,
+          "maxLength": 500
+        },
+        "imageUrl": {
+          "type": "string",
+          "description": "Solution card photo URL or compressed Data URL.",
+          "maxLength": 450000
+        },
+        "videoUrl": {
+          "type": "string",
+          "description": "Optional demonstration video URL.",
+          "maxLength": 2000
+        },
+        "highlight1": {
+          "type": "string",
+          "description": "First bullet point feature.",
+          "minLength": 1,
+          "maxLength": 200
+        },
+        "highlight2": {
+          "type": "string",
+          "description": "Second bullet point feature.",
+          "maxLength": 200
+        },
+        "highlight3": {
+          "type": "string",
+          "description": "Third bullet point feature.",
+          "maxLength": 200
+        },
+        "isPublished": {
+          "type": "boolean",
+          "description": "Whether the solution item is publicly visible."
+        },
+        "orderIndex": {
+          "type": "number",
+          "description": "Display order index."
+        },
+        "authorId": {
+          "type": "string",
+          "description": "UID of the administrator who created the item.",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Creation server timestamp."
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Last update server timestamp."
+        }
+      },
+      "required": [
+        "title",
+        "subtitle",
+        "shortDescription",
+        "imageUrl",
+        "videoUrl",
+        "highlight1",
+        "highlight2",
+        "highlight3",
+        "isPublished",
+        "orderIndex",
+        "authorId",
+        "createdAt",
+        "updatedAt"
+      ]
+    },
+    "CustomPage": {
+      "title": "CustomPage",
+      "description": "A custom page and menu item created by the site administrator.",
+      "type": "object",
+      "properties": {
+        "menuLabel": {
+          "type": "string",
+          "description": "Label displayed in the top navigation menu.",
+          "minLength": 1,
+          "maxLength": 40
+        },
+        "title": {
+          "type": "string",
+          "description": "Page main heading.",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "subtitle": {
+          "type": "string",
+          "description": "Optional subtitle displayed above or below the heading.",
+          "maxLength": 240
+        },
+        "content": {
+          "type": "string",
+          "description": "Page body text content.",
+          "minLength": 1,
+          "maxLength": 5000
+        },
+        "imageUrl": {
+          "type": "string",
+          "description": "Optional featured photo URL or compressed Data URL for the page.",
+          "maxLength": 450000
+        },
+        "videoUrl": {
+          "type": "string",
+          "description": "Optional video URL (YouTube, Vimeo, or direct MP4) embedded on the page.",
+          "maxLength": 2000
+        },
+        "isPublished": {
+          "type": "boolean",
+          "description": "Whether the custom page is publicly visible in the menu."
+        },
+        "orderIndex": {
+          "type": "number",
+          "description": "Order of the menu item in the navigation bar."
+        },
+        "authorId": {
+          "type": "string",
+          "description": "UID of the administrator who created the page.",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Creation server timestamp."
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Last update server timestamp."
+        }
+      },
+      "required": [
+        "menuLabel",
+        "title",
+        "subtitle",
+        "content",
+        "imageUrl",
+        "videoUrl",
+        "isPublished",
+        "orderIndex",
+        "authorId",
+        "createdAt",
+        "updatedAt"
+      ]
+    },
+    "AdminMember": {
+      "title": "AdminMember",
+      "description": "Trusted administrator registry document.",
+      "type": "object",
+      "properties": {
+        "uid": {
+          "type": "string",
+          "description": "Admin user UID.",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Creation timestamp."
+        }
+      },
+      "required": ["uid", "createdAt"]
+    },
+    "ChatFaq": {
+      "title": "ChatFaq",
+      "description": "Custom question and answer item configured by the administrator for the interactive support chat.",
+      "type": "object",
+      "properties": {
+        "question": {
+          "type": "string",
+          "description": "Question text displayed as a quick button in the chat.",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "keywords": {
+          "type": "string",
+          "description": "Comma-separated keywords for matching free-text user questions.",
+          "maxLength": 240
+        },
+        "answer": {
+          "type": "string",
+          "description": "Objective response returned by the chat assistant.",
+          "minLength": 1,
+          "maxLength": 1500
+        },
+        "category": {
+          "type": "string",
+          "description": "Segment category (Geral, Loja de Roupas, Informática, Salão de Beleza, Outro Comércio).",
+          "minLength": 1,
+          "maxLength": 60
+        },
+        "isPublished": {
+          "type": "boolean",
+          "description": "Whether this FAQ is active in the public chat."
+        },
+        "orderIndex": {
+          "type": "number",
+          "description": "Display order index."
+        },
+        "authorId": {
+          "type": "string",
+          "description": "UID of the administrator who created the FAQ.",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Creation server timestamp."
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Last update server timestamp."
+        }
+      },
+      "required": [
+        "question",
+        "keywords",
+        "answer",
+        "category",
+        "isPublished",
+        "orderIndex",
+        "authorId",
+        "createdAt",
+        "updatedAt"
+      ]
+    },
+    "ContactLead": {
+      "title": "ContactLead",
+      "description": "Commercial quote request or contact form submission from a website visitor.",
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Visitor full name.",
+          "minLength": 1,
+          "maxLength": 120
+        },
+        "company": {
+          "type": "string",
+          "description": "Visitor store or company name.",
+          "minLength": 1,
+          "maxLength": 120
+        },
+        "phone": {
+          "type": "string",
+          "description": "Visitor WhatsApp or phone number with area code.",
+          "minLength": 8,
+          "maxLength": 40
+        },
+        "segment": {
+          "type": "string",
+          "description": "Selected business segment.",
+          "minLength": 1,
+          "maxLength": 80
+        },
+        "message": {
+          "type": "string",
+          "description": "Optional short message from the visitor.",
+          "maxLength": 600
+        },
+        "status": {
+          "type": "string",
+          "description": "Lead processing status ('novo' or 'atendido').",
+          "enum": ["novo", "atendido"],
+          "minLength": 1,
+          "maxLength": 20
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Submission server timestamp."
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Last status update server timestamp."
+        }
+      },
+      "required": [
+        "name",
+        "company",
+        "phone",
+        "segment",
+        "message",
+        "status",
+        "createdAt",
+        "updatedAt"
+      ]
+    }
+  },
+  "firestore": {
+    "/site_config/{configId}": {
+      "schema": { "$ref": "#/entities/SiteConfig" },
+      "description": "Global site configuration document (configId = 'main')."
+    },
+    "/solutions/{solutionId}": {
+      "schema": { "$ref": "#/entities/SolutionItem" },
+      "description": "Commercial solution cards managed by the administrator."
+    },
+    "/custom_pages/{pageId}": {
+      "schema": { "$ref": "#/entities/CustomPage" },
+      "description": "Custom navigation menus and pages created by the administrator."
+    },
+    "/admins/{adminId}": {
+      "schema": { "$ref": "#/entities/AdminMember" },
+      "description": "Trusted administrators collection."
+    },
+    "/chat_faqs/{faqId}": {
+      "schema": { "$ref": "#/entities/ChatFaq" },
+      "description": "Custom FAQ questions and answers for the visitor support chat."
+    },
+    "/contact_leads/{leadId}": {
+      "schema": { "$ref": "#/entities/ContactLead" },
+      "description": "Quote requests and contact form leads submitted by visitors and managed by the administrator."
+    }
+  }
+}
