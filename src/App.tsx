@@ -732,34 +732,6 @@ export default function App() {
                   {siteConfig.bannerDescription}
                 </p>
 
-                <div className="mt-8 flex flex-wrap items-center justify-center gap-3.5">
-                  <a
-                    href={buildDynamicWhatsAppUrl(
-                      `Olá ${siteConfig.brandName}! Vim pelo site e gostaria de conversar sobre um sistema para o meu negócio.`
-                    )}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="px-6 py-3.5 text-sm font-semibold text-white bg-emerald-600 hover:bg-emerald-500 rounded-lg transition-colors flex items-center gap-2 whitespace-nowrap"
-                  >
-                    <MessageCircle className="w-4 h-4" />
-                    <span>Chamar no WhatsApp</span>
-                  </a>
-                  <button
-                    type="button"
-                    onClick={() => setChatOpen(true)}
-                    className="px-6 py-3.5 text-sm font-semibold text-white bg-blue-600 hover:bg-blue-500 rounded-lg transition-colors flex items-center gap-2 whitespace-nowrap cursor-pointer"
-                  >
-                    <span>Tirar Dúvidas no Chat</span>
-                    <ArrowRight className="w-4 h-4" />
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => navigateTo('solucoes')}
-                    className="px-5 py-3.5 text-sm font-semibold text-white bg-white/15 hover:bg-white/25 border border-white/30 rounded-lg transition-colors whitespace-nowrap cursor-pointer"
-                  >
-                    Ver Soluções
-                  </button>
-                </div>
               </div>
             </section>
 
