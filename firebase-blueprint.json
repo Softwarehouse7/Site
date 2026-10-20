@@ -25,8 +25,8 @@
         },
         "bannerImageUrl": {
           "type": "string",
-          "description": "Banner background image URL or compressed Data URL uploaded from computer.",
-          "maxLength": 450000
+          "description": "Banner background image URL stored in Cloud Storage or an external URL.",
+          "maxLength": 2048
         },
         "bannerVideoUrl": {
           "type": "string",
@@ -71,8 +71,8 @@
         },
         "aboutImageUrl": {
           "type": "string",
-          "description": "Photo URL or compressed Data URL displayed on the Quem Somos page.",
-          "maxLength": 450000
+          "description": "Photo URL stored in Cloud Storage or an external URL.",
+          "maxLength": 2048
         },
         "aboutVideoUrl": {
           "type": "string",
@@ -184,8 +184,8 @@
         },
         "imageUrl": {
           "type": "string",
-          "description": "Solution card photo URL or compressed Data URL.",
-          "maxLength": 450000
+          "description": "Solution card photo URL stored in Cloud Storage or an external URL.",
+          "maxLength": 2048
         },
         "videoUrl": {
           "type": "string",
@@ -280,8 +280,8 @@
         },
         "imageUrl": {
           "type": "string",
-          "description": "Optional featured photo URL or compressed Data URL for the page.",
-          "maxLength": 450000
+          "description": "Optional featured photo URL stored in Cloud Storage or an external URL.",
+          "maxLength": 2048
         },
         "videoUrl": {
           "type": "string",

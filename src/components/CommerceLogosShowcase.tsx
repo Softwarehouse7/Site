@@ -30,7 +30,7 @@ export const DEFAULT_COMMERCE_LOGOS: CommerceLogoItem[] = [
     segment: 'Moda Feminina & Calçados',
     city: 'São Paulo - SP',
     iconType: 'moda',
-    activeSince: 'Cliente Ativo · Caixa + Grade + NFC-e'
+    activeSince: 'Cliente Ativo · Caixa + Grade'
   },
   {
     id: 'store-2',

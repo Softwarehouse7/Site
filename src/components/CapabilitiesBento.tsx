@@ -71,7 +71,7 @@ export const CapabilitiesBento: React.FC<CapabilitiesBentoProps> = ({
 
             <div className="mt-8 pt-4 border-t border-slate-200/80 flex items-center justify-between">
               <span className="text-xs font-mono-tabular text-slate-500">
-                Homologado: NFC-e · SAT Fiscal · TEF Multi-Adquirente
+                Consulte a equipe sobre recursos fiscais e meios de pagamento
               </span>
               <button
                 type="button"
@@ -102,7 +102,7 @@ export const CapabilitiesBento: React.FC<CapabilitiesBentoProps> = ({
               <ul className="mt-6 pt-5 border-t border-slate-200/80 space-y-2.5 text-xs text-slate-700">
                 <li>· Rastreio de S/N na compra e na saída para impedir fraudes de garantia</li>
                 <li>· Montador de PCs com trava de compatibilidade de placa-mãe, fonte e CPU</li>
-                <li>· Emissão conjunta de NF-e (peças) + NFS-e (mão de obra técnica)</li>
+                <li>· Consulte a equipe sobre requisitos fiscais da sua operação</li>
               </ul>
             </div>
 
@@ -203,7 +203,7 @@ export const CapabilitiesBento: React.FC<CapabilitiesBentoProps> = ({
 
             <div className="mt-8 pt-4 border-t border-slate-800 flex items-center justify-between">
               <span className="text-xs font-mono-tabular text-slate-400">
-                NF-e · NFC-e · MDF-e · SPED Fiscal · API REST Aberta
+                Consulte a equipe sobre integrações e requisitos fiscais
               </span>
               <button
                 type="button"

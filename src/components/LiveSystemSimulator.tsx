@@ -77,7 +77,7 @@ export const LiveSystemSimulator: React.FC<LiveSystemSimulatorProps> = ({
         }
         const updatedSizes = { ...item.sizes, [sizeKey]: currentQty - 1 };
         setLastPosMessage(
-          `Venda PDV registrada: 1x ${item.name} (${item.color} · Tam ${sizeKey}) — NFC-e emitida · Valor ${formatBRL(item.salePrice)}`
+          `Venda simulada registrada: 1x ${item.name} (${item.color} · Tam ${sizeKey}) · Valor ${formatBRL(item.salePrice)}`
         );
         return { ...item, sizes: updatedSizes };
       })
@@ -555,7 +555,7 @@ export const LiveSystemSimulator: React.FC<LiveSystemSimulatorProps> = ({
                     {techOrders.length} equipamentos
                   </strong>
                   <span className="text-xs text-slate-500 mt-1 block">
-                    100% com Número de Série (S/N) vinculado à NF-e
+                    Número de Série (S/N) vinculado ao equipamento
                   </span>
                 </div>
                 <div>
@@ -945,12 +945,12 @@ export const LiveSystemSimulator: React.FC<LiveSystemSimulatorProps> = ({
                   </span>
                 </div>
                 <div>
-                  <span className="text-xs text-slate-500 block">Rastreabilidade Fiscal & Lote</span>
+                  <span className="text-xs text-slate-500 block">Rastreabilidade de Produtos & Lotes</span>
                   <strong className="text-2xl font-bold text-slate-900 font-mono-tabular mt-1 block">
-                    NCM + ICMS-ST
+                    NCM e lote
                   </strong>
                   <span className="text-xs text-slate-500 mt-1 block">
-                    Cálculo automático de substituição tributária e DIFAL na NF-e
+                    Consulte a equipe sobre os requisitos fiscais da sua operação
                   </span>
                 </div>
                 <div className="flex flex-col justify-between items-start md:items-end">

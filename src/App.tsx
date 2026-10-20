@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {
   doc,
   setDoc,
@@ -183,12 +183,12 @@ const DEFAULT_SOLUTIONS: SolutionCardData[] = [
     title: 'Demais Segmentos Comerciais',
     subtitle: 'Varejo em Geral · Mercados · Distribuidoras',
     shortDescription:
-      'Gestão completa de vendas, estoque, contas a pagar e emissão fiscal para qualquer ramo comercial.',
+      'Gestão de vendas, estoque e contas a pagar para diferentes ramos comerciais.',
     imageUrl: commerceSmilingImg,
     videoUrl: '',
     highlight1: 'Preços diferenciados para Atacado e Varejo',
     highlight2: 'Controle de estoque por lote, validade e código de barras',
-    highlight3: 'Fluxo de caixa, PIX integrado e Nota Fiscal (NF-e / NFC-e)',
+    highlight3: 'Fluxo de caixa e integração com meios de pagamento',
     isPublished: true,
     orderIndex: 5,
     demoMetricLabel: 'Controle financeiro e estoque unificado',
@@ -227,7 +227,7 @@ export default function App() {
   const [calcTerminals, setCalcTerminals] = useState<string>('1 Caixa / PC');
   const [calcModules, setCalcModules] = useState<string[]>([
     'Frente de Caixa (PDV)',
-    'Emissão Fiscal (NFC-e / NF-e)',
+    'Recursos fiscais (consultar disponibilidade)',
     'Controle de Estoque'
   ]);
 
@@ -242,6 +242,7 @@ export default function App() {
   const [formError, setFormError] = useState('');
   const [formSuccess, setFormSuccess] = useState(false);
   const [isSubmittingLead, setIsSubmittingLead] = useState(false);
+  const contactHoneypotRef = useRef<HTMLInputElement>(null);
 
   // 2. Real-time Firestore Listeners for Public & Admin CMS Data
   useEffect(() => {
@@ -341,14 +342,29 @@ export default function App() {
     const computedTitle = customPg
       ? `${customPg.title} · ${siteConfig.brandName}`
       : pageTitleMap[activePage] || `${siteConfig.brandName} — Sistemas Corporativos Customizados`;
+    const computedDescription =
+      customPg?.subtitle || customPg?.content.slice(0, 160) || siteConfig.bannerDescription;
 
     document.title = computedTitle;
     const ogTitle = document.querySelector('meta[property="og:title"]');
     if (ogTitle) ogTitle.setAttribute('content', computedTitle);
+    const canonicalUrl = `${window.location.origin}${import.meta.env.BASE_URL}`;
+    const canonicalLink = document.querySelector<HTMLLinkElement>('link[rel="canonical"]');
+    if (canonicalLink) canonicalLink.href = canonicalUrl;
+    const ogUrl = document.querySelector('meta[property="og:url"]');
+    if (ogUrl) ogUrl.setAttribute('content', canonicalUrl);
+    const ogImage = document.querySelector('meta[property="og:image"]');
+    if (ogImage) ogImage.setAttribute('content', `${canonicalUrl}social-preview.jpg`);
+    const twitterImage = document.querySelector('meta[name="twitter:image"]');
+    if (twitterImage) twitterImage.setAttribute('content', `${canonicalUrl}social-preview.jpg`);
     const metaDesc = document.querySelector('meta[name="description"]');
-    if (metaDesc && siteConfig.bannerDescription) {
-      metaDesc.setAttribute('content', siteConfig.bannerDescription);
-    }
+    if (metaDesc) metaDesc.setAttribute('content', computedDescription);
+    const ogDescription = document.querySelector('meta[property="og:description"]');
+    if (ogDescription) ogDescription.setAttribute('content', computedDescription);
+    const twitterTitle = document.querySelector('meta[name="twitter:title"]');
+    if (twitterTitle) twitterTitle.setAttribute('content', computedTitle);
+    const twitterDescription = document.querySelector('meta[name="twitter:description"]');
+    if (twitterDescription) twitterDescription.setAttribute('content', computedDescription);
   }, [activePage, siteConfig.brandName, siteConfig.bannerSubtitle, siteConfig.bannerDescription, customPages]);
 
   // Merge default solutions with any custom/edited solutions saved in Firestore
@@ -404,6 +420,8 @@ export default function App() {
   const handleSubmitContact = async (e: React.FormEvent) => {
     e.preventDefault();
     setFormError('');
+
+    if (contactHoneypotRef.current?.value) return;
 
     if (!name.trim() || !company.trim()) {
       setFormError('Por favor, preencha seu nome e o nome da sua empresa.');
@@ -513,7 +531,7 @@ export default function App() {
           const nextCount = Math.max(0, parseInt(countStr, 10) - 1);
           return `${nextCount} un.`;
         });
-        setSimActionFeedback(`✓ Saída de "${row.col1}" lançada no caixa com emissão de NFC-e!`);
+        setSimActionFeedback(`✓ Saída simulada de "${row.col1}" lançada no caixa.`);
         return {
           ...row,
           col3: updatedCol3,
@@ -1148,7 +1166,7 @@ export default function App() {
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                         {[
                           'Frente de Caixa (PDV)',
-                          'Emissão Fiscal (NFC-e / NF-e)',
+                          'Recursos fiscais (consultar disponibilidade)',
                           'Controle de Estoque / Grade',
                           'Ordem de Serviço / IMEI',
                           'Agenda & Comissões',
@@ -1366,6 +1384,17 @@ export default function App() {
                     </div>
                   ) : (
                     <form onSubmit={handleSubmitContact} noValidate className="space-y-4">
+                      <div className="absolute h-px w-px overflow-hidden" aria-hidden="true">
+                        <label htmlFor="c-website">Website</label>
+                        <input
+                          ref={contactHoneypotRef}
+                          id="c-website"
+                          name="website"
+                          type="text"
+                          tabIndex={-1}
+                          autoComplete="off"
+                        />
+                      </div>
                       <div>
                         <label className="block text-xs font-semibold text-slate-800 mb-2">
                           Qual é o seu segmento?
@@ -1549,19 +1578,19 @@ export default function App() {
                   {[
                     {
                       q: '1. O sistema precisa de internet o tempo todo para funcionar?',
-                      a: 'Não! Nosso frente de caixa (PDV) possui contingência inteligente: você continua registrando vendas e imprimindo cupons normalmente mesmo se a internet da loja cair.'
+                      a: 'A necessidade de internet pode variar conforme os recursos e a configuração contratada. Fale com nossa equipe para confirmar o que funciona melhor na sua operação.'
                     },
                     {
                       q: '2. O sistema emite Nota Fiscal (NF-e, NFC-e e NFS-e)?',
-                      a: 'Sim, 100% homologado na SEFAZ de todos os estados e prefeituras. O sistema calcula impostos automaticamente e já envia os arquivos XML direto para o seu contador.'
+                      a: 'Os recursos fiscais e documentos disponíveis dependem da configuração e da legislação aplicável. Nossa equipe pode confirmar a compatibilidade com o seu negócio.'
                     },
                     {
                       q: '3. Como funciona a implantação e o treinamento da minha equipe?',
                       a: 'Nossa equipe faz toda a configuração inicial para o seu segmento, importa seu cadastro de produtos atual e treina você e seus funcionários passo a passo no mesmo dia.'
                     },
                     {
-                      q: '4. Os dados do meu estoque e financeiro ficam seguros?',
-                      a: 'Sim! Além do controle de acesso por funcionário com senha, o sistema realiza backup automático diário em nuvem criptografada para você nunca perder nenhuma informação.'
+                      q: '4. Como são protegidos e recuperados os dados?',
+                      a: 'Os recursos de proteção e recuperação de dados dependem da configuração contratada. Consulte nossa equipe para conhecer os detalhes antes da contratação.'
                     }
                   ].map((faq, idx) => {
                     const isOpen = openFaqIndex === idx;

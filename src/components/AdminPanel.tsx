@@ -5,7 +5,10 @@ import {
   setDoc,
   updateDoc,
   deleteDoc,
-  serverTimestamp
+  serverTimestamp,
+  getDoc,
+  getDocs,
+  collection
 } from 'firebase/firestore';
 import {
   db,
@@ -14,7 +17,8 @@ import {
   handleFirestoreError,
   OperationType,
   OWNER_EMAIL,
-  isOwnerEmail
+  isOwnerEmail,
+  uploadImageToStorage
 } from '../firebase';
 import {
   X,
@@ -377,13 +381,17 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
     const path = 'site_config/main';
 
     try {
+      const [bannerImageUrl, aboutImageUrl] = await Promise.all([
+        uploadImageToStorage(configForm.bannerImageUrl.trim(), currentUser.uid),
+        uploadImageToStorage(configForm.aboutImageUrl.trim(), currentUser.uid)
+      ]);
       const payload = {
         brandName: configForm.brandName.trim().slice(0, 80) || 'House Software',
         bannerSubtitle: configForm.bannerSubtitle.trim().slice(0, 120) || 'soluções inteligente',
         bannerDescription:
           configForm.bannerDescription.trim().slice(0, 400) ||
           'Sistemas personalizados para o seu comércio.',
-        bannerImageUrl: configForm.bannerImageUrl.trim().slice(0, 450000),
+        bannerImageUrl,
         bannerVideoUrl: configForm.bannerVideoUrl.trim().slice(0, 2000),
         homeSectionKicker:
           configForm.homeSectionKicker.trim().slice(0, 120) || 'INOVAÇÃO PARA O SEU NEGÓCIO',
@@ -401,7 +409,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
         aboutDescription:
           configForm.aboutDescription.trim().slice(0, 1000) ||
           'Criamos sistemas sob medida que descomplicam suas vendas.',
-        aboutImageUrl: configForm.aboutImageUrl.trim().slice(0, 450000),
+        aboutImageUrl,
         aboutVideoUrl: configForm.aboutVideoUrl.trim().slice(0, 2000),
         aboutBullet1:
           configForm.aboutBullet1.trim().slice(0, 240) ||
@@ -435,6 +443,61 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
         error,
         hasExistingSiteConfigDoc ? OperationType.UPDATE : OperationType.CREATE,
         path
+      );
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
+  const handleMigrateImages = async () => {
+    if (!currentUser) return;
+    setIsSaving(true);
+    setStatusMsg(null);
+    let migratedDocuments = 0;
+
+    const migrateFields = async (
+      documentRef: ReturnType<typeof doc>,
+      data: Record<string, unknown>,
+      fields: string[]
+    ) => {
+      const updates: Record<string, unknown> = {};
+      for (const field of fields) {
+        const value = data[field];
+        if (typeof value === 'string' && value.startsWith('data:image/')) {
+          updates[field] = await uploadImageToStorage(value, currentUser.uid);
+        }
+      }
+      if (Object.keys(updates).length > 0) {
+        await updateDoc(documentRef, { ...updates, updatedAt: serverTimestamp() });
+        migratedDocuments += 1;
+      }
+    };
+
+    try {
+      const configRef = doc(db, 'site_config', 'main');
+      const configSnapshot = await getDoc(configRef);
+      if (configSnapshot.exists()) {
+        await migrateFields(configRef, configSnapshot.data(), ['bannerImageUrl', 'aboutImageUrl']);
+      }
+
+      for (const collectionName of ['solutions', 'custom_pages']) {
+        const documents = await getDocs(collection(db, collectionName));
+        for (const documentSnapshot of documents.docs) {
+          await migrateFields(documentSnapshot.ref, documentSnapshot.data(), ['imageUrl']);
+        }
+      }
+      showFeedback(
+        'success',
+        migratedDocuments
+          ? `${migratedDocuments} documento(s) migrado(s) para o Firebase Storage.`
+          : 'Não há imagens antigas para migrar.'
+      );
+    } catch (error) {
+      showFeedback(
+        'error',
+        `Migração interrompida após ${migratedDocuments} documento(s): ${
+          error instanceof Error ? error.message : 'falha desconhecida.'
+        }`
       );
     } finally {
       setIsSaving(false);
@@ -482,7 +545,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
         title: solTitle.trim().slice(0, 120),
         subtitle: (solSubtitle.trim() || 'Solução Customizada').slice(0, 120),
         shortDescription: solDesc.trim().slice(0, 500),
-        imageUrl: solImage.trim().slice(0, 450000),
+        imageUrl: await uploadImageToStorage(solImage.trim(), currentUser.uid),
         videoUrl: solVideo.trim().slice(0, 2000),
         highlight1: solH1.trim().slice(0, 200),
         highlight2: solH2.trim().slice(0, 200),
@@ -569,7 +632,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
         title: pageTitle.trim().slice(0, 160),
         subtitle: pageSubtitle.trim().slice(0, 240),
         content: pageContent.trim().slice(0, 5000),
-        imageUrl: pageImage.trim().slice(0, 450000),
+        imageUrl: await uploadImageToStorage(pageImage.trim(), currentUser.uid),
         videoUrl: pageVideo.trim().slice(0, 2000),
         isPublished: true,
         orderIndex: editingPageId
@@ -1052,6 +1115,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
 
               {/* TAB 1: GERAL (HOME, QUEM SOMOS, CONTATO) */}
               {activeTab === 'geral' && (
+                <>
                 <form onSubmit={handleSaveSiteConfig} className="space-y-6">
                   {/* Bloco Banner & Home */}
                   <div className="p-5 bg-[#F8F8F6] border border-slate-200 rounded-xl space-y-4">
@@ -1315,6 +1379,20 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
                     </button>
                   </div>
                 </form>
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 border-t border-slate-200 pt-4">
+                  <p className="text-xs text-slate-600">
+                    Transfere para o Firebase Storage as imagens antigas que ainda estão salvas no Firestore.
+                  </p>
+                  <button
+                    type="button"
+                    onClick={handleMigrateImages}
+                    disabled={isSaving}
+                    className="px-4 py-2.5 text-xs font-bold text-slate-800 bg-slate-100 hover:bg-slate-200 disabled:opacity-50 rounded-lg cursor-pointer"
+                  >
+                    {isSaving ? 'Processando...' : 'Migrar imagens antigas'}
+                  </button>
+                </div>
+                </>
               )}
 
               {/* TAB 2: GERENCIAR SOLUÇÕES */}

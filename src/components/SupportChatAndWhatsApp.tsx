@@ -56,7 +56,7 @@ export const DEFAULT_CHAT_FAQS: ChatFaqDocData[] = [
     question: 'Como funciona a instalação em rede?',
     keywords: 'rede, computadores, pcs, servidor, varios, vários, conectar, sincronizar, balcao, escritório',
     answer:
-      'Instalamos o banco de dados central no seu computador principal (servidor) e conectamos os outros computadores (caixas e escritório) pela rede local. Todos operam o mesmo estoque, vendas e financeiro em tempo real, com backup protegido!',
+      'Instalamos o banco de dados central no seu computador principal (servidor) e conectamos os outros computadores (caixas e escritório) pela rede local. Todos operam o mesmo estoque, vendas e financeiro em tempo real.',
     isPublished: true,
     orderIndex: 1
   },
@@ -116,7 +116,7 @@ export const DEFAULT_CHAT_FAQS: ChatFaqDocData[] = [
     question: 'E se a internet cair na loja?',
     keywords: 'internet, cair, offline, sem internet, conexão, travar, rede',
     answer:
-      'Sua loja não para! Nosso PDV conta com contingência operacional para que você continue registrando vendas no balcão mesmo se a internet oscilar, sincronizando tudo automaticamente depois.',
+      'A necessidade de internet pode variar conforme os recursos e a configuração contratada. Fale com nossa equipe para confirmar o que funciona melhor na sua operação.',
     isPublished: true,
     orderIndex: 7
   },
@@ -146,7 +146,7 @@ export const DEFAULT_CHAT_FAQS: ChatFaqDocData[] = [
     question: 'Emite Nota Fiscal (NF-e e Cupom)?',
     keywords: 'nota, fiscal, cupom, nfe, nfce, nfse, sefaz, contador, imposto, pix',
     answer:
-      'Sim! 100% homologado na SEFAZ para emitir Cupom Fiscal (NFC-e), Nota Grande (NF-e), Nota de Serviço (NFS-e), integração com PIX/Cartão e envio automático de arquivos para o seu contador.',
+      'Os recursos fiscais e documentos disponíveis dependem da configuração e da legislação aplicável. Nossa equipe pode confirmar a compatibilidade com o seu negócio.',
     isPublished: true,
     orderIndex: 10
   },
@@ -284,16 +284,21 @@ export const SupportChatAndWhatsApp: React.FC<SupportChatAndWhatsAppProps> = ({
   const [leadPhone, setLeadPhone] = useState('');
   const [leadSegment, setLeadSegment] = useState('Loja de Roupas');
   const [leadSubmitted, setLeadSubmitted] = useState(false);
+  const [leadSubmitting, setLeadSubmitting] = useState(false);
+  const [leadSubmitError, setLeadSubmitError] = useState('');
+  const leadHoneypotRef = useRef<HTMLInputElement>(null);
 
   // 24h Interactive Quote Simulator State (Self-Service when unattended)
   const [simStep, setSimStep] = useState<1 | 2 | 3 | 4 | 5>(1);
   const [simSegment, setSimSegment] = useState<string>('Loja de Roupas');
   const [simTerminals, setSimTerminals] = useState<string>('1 Computador / Caixa');
-  const [simFiscal, setSimFiscal] = useState<string>('Com Emissão Fiscal (NFC-e / NF-e)');
+  const [simFiscal, setSimFiscal] = useState<string>('Quero consultar recursos fiscais para meu negócio');
   const [simContactName, setSimContactName] = useState<string>('');
   const [simContactPhone, setSimContactPhone] = useState<string>('');
   const [simSubmitting, setSimSubmitting] = useState<boolean>(false);
   const [simCompleted, setSimCompleted] = useState<boolean>(false);
+  const [simSubmitError, setSimSubmitError] = useState('');
+  const simHoneypotRef = useRef<HTMLInputElement>(null);
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
@@ -411,7 +416,10 @@ export const SupportChatAndWhatsApp: React.FC<SupportChatAndWhatsAppProps> = ({
   // Quick Lead Submit (Direct lead box inside chat)
   const handleLeadSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!leadName.trim() || leadPhone.replace(/\D/g, '').length < 10) return;
+    if (leadHoneypotRef.current?.value) return;
+    if (leadSubmitting || !leadName.trim() || leadPhone.replace(/\D/g, '').length < 10) return;
+    setLeadSubmitting(true);
+    setLeadSubmitError('');
 
     const now = new Date().toLocaleTimeString('pt-BR', {
       hour: '2-digit',
@@ -432,10 +440,17 @@ export const SupportChatAndWhatsApp: React.FC<SupportChatAndWhatsAppProps> = ({
         createdAt: serverTimestamp(),
         updatedAt: serverTimestamp()
       });
-    } catch {
-      // Non-blocking fallback
+    } catch (error) {
+      setLeadSubmitError(
+        error instanceof Error
+          ? `Não foi possível registrar seu contato: ${error.message}`
+          : 'Não foi possível registrar seu contato. Tente novamente ou fale conosco pelo WhatsApp.'
+      );
+      setLeadSubmitting(false);
+      return;
     }
 
+    setLeadSubmitting(false);
     setLeadSubmitted(true);
     setMessages((prev) => [
       ...prev,
@@ -455,9 +470,11 @@ export const SupportChatAndWhatsApp: React.FC<SupportChatAndWhatsAppProps> = ({
   // Self-Service 24h Simulator Submission (Solves unattended / offline moments)
   const handleSimulatorSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (simHoneypotRef.current?.value) return;
     if (!simContactName.trim() || simContactPhone.replace(/\D/g, '').length < 10) return;
 
     setSimSubmitting(true);
+    setSimSubmitError('');
     const leadId = `sim_24h_${Date.now()}_${Math.random().toString(36).slice(2, 7)}`;
     const fullSummary = `Simulação 24h: Ramo: ${simSegment} | Terminais: ${simTerminals} | Fiscal: ${simFiscal} | Resp: ${simContactName} (${simContactPhone})`;
 
@@ -472,8 +489,14 @@ export const SupportChatAndWhatsApp: React.FC<SupportChatAndWhatsAppProps> = ({
         createdAt: serverTimestamp(),
         updatedAt: serverTimestamp()
       });
-    } catch {
-      // Non-blocking fallback
+    } catch (error) {
+      setSimSubmitError(
+        error instanceof Error
+          ? `Não foi possível registrar seu contato: ${error.message}`
+          : 'Não foi possível registrar seu contato. Tente novamente ou fale conosco pelo WhatsApp.'
+      );
+      setSimSubmitting(false);
+      return;
     }
 
     setSimSubmitting(false);
@@ -793,6 +816,22 @@ export const SupportChatAndWhatsApp: React.FC<SupportChatAndWhatsAppProps> = ({
                       </div>
                     ) : (
                       <form onSubmit={handleLeadSubmit} className="space-y-2">
+                        <div className="absolute h-px w-px overflow-hidden" aria-hidden="true">
+                          <label htmlFor="chat-website">Website</label>
+                          <input
+                            ref={leadHoneypotRef}
+                            id="chat-website"
+                            name="website"
+                            type="text"
+                            tabIndex={-1}
+                            autoComplete="off"
+                          />
+                        </div>
+                        {leadSubmitError && (
+                          <p role="alert" className="text-[11px] text-red-700">
+                            {leadSubmitError}
+                          </p>
+                        )}
                         <input
                           type="text"
                           required
@@ -811,9 +850,10 @@ export const SupportChatAndWhatsApp: React.FC<SupportChatAndWhatsAppProps> = ({
                         />
                         <button
                           type="submit"
-                          className="w-full py-2 text-xs font-bold text-white bg-blue-700 hover:bg-blue-800 rounded-md cursor-pointer"
+                          disabled={leadSubmitting}
+                          className="w-full py-2 text-xs font-bold text-white bg-blue-700 hover:bg-blue-800 disabled:opacity-50 rounded-md cursor-pointer"
                         >
-                          Confirmar e Gravar Pedido
+                          {leadSubmitting ? 'Registrando...' : 'Confirmar e Gravar Pedido'}
                         </button>
                       </form>
                     )}
@@ -969,12 +1009,12 @@ export const SupportChatAndWhatsApp: React.FC<SupportChatAndWhatsAppProps> = ({
               {/* Step 3: Fiscal */}
               <div className="space-y-1.5">
                 <label className="text-[11px] font-bold text-slate-700">
-                  3. Necessidade de Emissão Fiscal:
+                  3. Necessidade de Recursos Fiscais:
                 </label>
                 <div className="grid grid-cols-1 gap-1.5">
                   {[
-                    'Com Emissão Fiscal (Cupom NFC-e / NF-e SEFAZ)',
-                    'Sem Fiscal no Momento (Apenas Controle Gerencial Interno)',
+                    'Quero consultar recursos fiscais para meu negócio',
+                    'Não preciso tratar de recursos fiscais agora',
                     'Quero Orientação do Consultor'
                   ].map((fisc) => (
                     <button
@@ -999,10 +1039,26 @@ export const SupportChatAndWhatsApp: React.FC<SupportChatAndWhatsAppProps> = ({
                   onSubmit={handleSimulatorSubmit}
                   className="bg-white p-3 rounded-xl border border-blue-200 space-y-2.5"
                 >
+                  <div className="absolute h-px w-px overflow-hidden" aria-hidden="true">
+                    <label htmlFor="sim-website">Website</label>
+                    <input
+                      ref={simHoneypotRef}
+                      id="sim-website"
+                      name="website"
+                      type="text"
+                      tabIndex={-1}
+                      autoComplete="off"
+                    />
+                  </div>
                   <div className="text-xs font-bold text-slate-900 flex items-center gap-1.5">
                     <UserCheck className="w-3.5 h-3.5 text-blue-600" />
                     <span>Onde você quer receber o orçamento detalhado?</span>
                   </div>
+                  {simSubmitError && (
+                    <p role="alert" className="text-[11px] text-red-700">
+                      {simSubmitError}
+                    </p>
+                  )}
                   <input
                     type="text"
                     required

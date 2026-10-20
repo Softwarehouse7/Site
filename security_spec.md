@@ -7,7 +7,9 @@
 3. **Author & Ownership Integrity**: Every write to `/site_config`, `/solutions`, and `/custom_pages` must have `authorId == request.auth.uid` on creation and preserve `authorId == existing().authorId` and `createdAt == existing().createdAt` on update.
 4. **Temporal Integrity**: `createdAt` must equal `request.time` on document creation, and `updatedAt` must equal `request.time` on both creation and update.
 5. **Query Enforcer on Public Lists**: Public visitors can read published `/solutions` and `/custom_pages` only when `resource.data.isPublished == true` (or if the requester is `isAdmin()`).
-6. **Strict Key & Size Bounds**: Every string field is strictly bounded by `.size()` matching `firebase-blueprint.json`, and every create/update operation enforces `.hasAll()` and `.hasOnly()` / `affectedKeys().hasOnly()`.
+6. **Strict Key & Size Bounds**: Every string field is strictly bounded by `.size()` matching `firebase-blueprint.json`, and every create/update operation enforces `.hasAll()` and `.hasOnly()` / `affectedKeys().hasOnly()`. Image URL fields are limited to 2048 characters.
+7. **Image Storage**: Uploaded images are stored in Cloud Storage under `/site-media/{uid}/{fileName}`. Reads are public; only verified administrator accounts may create images, in their own UID folder, up to 5 MiB and with JPEG, PNG, or WebP content types. Firestore stores only image URLs.
+8. **Abuse Protection**: Public lead forms include honeypot fields. App Check with reCAPTCHA v3 protects Firestore and Cloud Storage only after a site key is configured and enforcement is enabled in the Firebase Console.
 
 ## 2. The "Dirty Dozen" Payloads
 

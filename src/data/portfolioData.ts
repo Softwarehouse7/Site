@@ -92,7 +92,7 @@ export const CASE_STUDIES: ProjectCaseStudy[] = [
     deploymentWeeks: 6,
     title: 'ERP Omnichannel com Grade Matriz de Cor/Tamanho e PDV de Troca em 8 Segundos',
     summary:
-      'Unificação de estoque físico e catálogo digital para rede de moda feminina e alfaiataria, eliminando rupturas de tamanho M/G entre filiais e automatizando a emissão de NFC-e.',
+      'Unificação de estoque físico e catálogo digital para rede de moda feminina e alfaiataria, reduzindo rupturas de tamanho M/G entre filiais.',
     imageUrl: fashionImg,
     primaryMetric: '-68% em rupturas de grade nas 6 lojas em 4 meses',
     secondaryMetric: '8,4s tempo médio de fechamento no PDV',
@@ -102,12 +102,12 @@ export const CASE_STUDIES: ProjectCaseStudy[] = [
       'Desenvolvemos um núcleo de estoque matricial em tempo real com transferência inteligente entre lojas, etiqueta térmica código de barras/QR por SKU, sacola condicional com baixa automática e módulo de fidelidade por cashback.',
     modulesDelivered: [
       'Matriz Dinâmica de Grade (Tamanho × Cor × Estampa)',
-      'PDV Touch Homologado SEFAZ (NFC-e / SAT) com Operação Offline',
+      'PDV Touch para gestão de vendas e grade de produtos',
       'Gestão de Sacola Condicional (Malinha Delivery) com Cobrança via Link',
       'Curva ABC de Giro de Coleção e Sugestão de Remarcação',
       'Troca Rápida por Código QR na Etiqueta Interna'
     ],
-    integrations: ['SEFAZ NFC-e / NF-e', 'TEF Stone & Cielo', 'Shopify / Nuvemshop Sync', 'WhatsApp API Oficial'],
+    integrations: ['TEF Stone & Cielo', 'Shopify / Nuvemshop Sync', 'WhatsApp API Oficial'],
     databaseStack: 'PostgreSQL + Redis Cache + Node.js / React',
     testimonial: {
       quote:
@@ -142,7 +142,7 @@ export const CASE_STUDIES: ProjectCaseStudy[] = [
       'Configurador "Monte seu PC" com Trava de Compatibilidade (Socket/TDP)',
       'Gestão de Garantia de Balcão e RMA de Fornecedores'
     ],
-    integrations: ['SEFAZ NF-e / NFS-e Conjugada', 'API Correios & Jadlog', 'PIX Dinâmico Banco Inter', 'Bling / Contabilidade'],
+    integrations: ['API Correios & Jadlog', 'PIX Dinâmico Banco Inter', 'Bling / Contabilidade'],
     databaseStack: 'PostgreSQL + TypeScript + Impressão Térmica ZPL',
     testimonial: {
       quote:
@@ -177,7 +177,7 @@ export const CASE_STUDIES: ProjectCaseStudy[] = [
       'Gestão de Pacotes de Sessões, Clubes de Assinatura e Vale-Presente',
       'Prontuário de Anamnese e Histórico Químico da Cliente'
     ],
-    integrations: ['Split de Pagamento Pagar.me / Stone', 'NFS-e Municipal Automática', 'Confirmação Automática WhatsApp', 'Google Calendar Sync'],
+    integrations: ['Split de Pagamento Pagar.me / Stone', 'Confirmação Automática WhatsApp', 'Google Calendar Sync'],
     databaseStack: 'PostgreSQL + React PWA (Tablet/Mobile) + Node.js',
     testimonial: {
       quote:
@@ -212,7 +212,7 @@ export const CASE_STUDIES: ProjectCaseStudy[] = [
       'Financeiro Completo: Contas a Pagar/Receber, Conciliação OFX, Boletos e PIX QR',
       'Motor Tributário Automatizado (ICMS-ST, DIFAL, PIS/COFINS e SPED Fiscal)'
     ],
-    integrations: ['SEFAZ NF-e / MDF-e / CT-e', 'Bancos via CNAB 240/400 e API PIX', 'Coletores de Dados Android', 'Exportação Domínio / Alterdata'],
+    integrations: ['Bancos via CNAB 240/400 e API PIX', 'Coletores de Dados Android', 'Exportação Domínio / Alterdata'],
     databaseStack: 'PostgreSQL Cluster + Node.js Microservices + React Desktop/Web',
     testimonial: {
       quote:

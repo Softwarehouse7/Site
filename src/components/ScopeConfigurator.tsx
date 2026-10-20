@@ -10,7 +10,7 @@ interface ScopeConfiguratorProps {
 const MODULES_BY_SEGMENT: Record<SegmentKey, { id: string; label: string; weeksImpact: number }[]> = {
   moda: [
     { id: 'grade-matriz', label: 'Grade Matriz (Tamanho × Cor × Coleção) + Etiquetas Térmicas', weeksImpact: 1 },
-    { id: 'pdv-nfce', label: 'PDV Rápido Touch com NFC-e / TEF e Troca por QR Code', weeksImpact: 1 },
+    { id: 'pdv-nfce', label: 'PDV Rápido Touch + levantamento de requisitos fiscais', weeksImpact: 1 },
     { id: 'sacola-condicional', label: 'Gestão de Sacola Condicional (Malinha) e Clube de Cashback', weeksImpact: 1 },
     { id: 'sync-ecommerce', label: 'Sincronização de Estoque com E-commerce (Shopify / Nuvemshop)', weeksImpact: 1 }
   ],
@@ -34,7 +34,7 @@ const MODULES_BY_SEGMENT: Record<SegmentKey, { id: string; label: string; weeksI
   comercio: [
     { id: 'atacado-varejo', label: 'Tabelas Dinâmicas Atacado/Varejo com Trava de Margem Mínima', weeksImpact: 1 },
     { id: 'lote-validade', label: 'Controle de Estoque por Lote, Validade (FEFO) e Coletor Óptico', weeksImpact: 1 },
-    { id: 'fiscal-sped', label: 'Faturamento NF-e / NFC-e / MDF-e com Motor Tributário ICMS-ST', weeksImpact: 2 },
+    { id: 'fiscal-sped', label: 'Levantamento de requisitos fiscais e tributários', weeksImpact: 2 },
     { id: 'financeiro-dre', label: 'Financeiro Completo, Conciliação Bancária, PIX e DRE em Tempo Real', weeksImpact: 1 }
   ]
 };
@@ -270,7 +270,7 @@ export const ScopeConfigurator: React.FC<ScopeConfiguratorProps> = ({
               </div>
               <div className="text-xs text-slate-600 sm:text-right">
                 <div>Inclui migração de dados legados + treinamento da equipe</div>
-                <div className="text-slate-500">Homologação fiscal SEFAZ e suporte direto House Software</div>
+                <div className="text-slate-500">Consulte a equipe sobre integrações fiscais e suporte</div>
               </div>
             </div>
           </div>

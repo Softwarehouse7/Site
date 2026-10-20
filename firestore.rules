@@ -89,7 +89,7 @@ service cloud.firestore {
       data.brandName is string && data.brandName.size() >= 1 && data.brandName.size() <= 80 &&
       data.bannerSubtitle is string && data.bannerSubtitle.size() >= 1 && data.bannerSubtitle.size() <= 120 &&
       data.bannerDescription is string && data.bannerDescription.size() >= 1 && data.bannerDescription.size() <= 400 &&
-      data.bannerImageUrl is string && data.bannerImageUrl.size() <= 450000 &&
+      data.bannerImageUrl is string && data.bannerImageUrl.size() <= 2048 &&
       data.bannerVideoUrl is string && data.bannerVideoUrl.size() <= 2000 &&
       data.homeSectionKicker is string && data.homeSectionKicker.size() >= 1 && data.homeSectionKicker.size() <= 120 &&
       data.homeSectionTitle is string && data.homeSectionTitle.size() >= 1 && data.homeSectionTitle.size() <= 160 &&
@@ -97,7 +97,7 @@ service cloud.firestore {
       data.aboutKicker is string && data.aboutKicker.size() >= 1 && data.aboutKicker.size() <= 120 &&
       data.aboutTitle is string && data.aboutTitle.size() >= 1 && data.aboutTitle.size() <= 200 &&
       data.aboutDescription is string && data.aboutDescription.size() >= 1 && data.aboutDescription.size() <= 1000 &&
-      data.aboutImageUrl is string && data.aboutImageUrl.size() <= 450000 &&
+      data.aboutImageUrl is string && data.aboutImageUrl.size() <= 2048 &&
       data.aboutVideoUrl is string && data.aboutVideoUrl.size() <= 2000 &&
       data.aboutBullet1 is string && data.aboutBullet1.size() >= 1 && data.aboutBullet1.size() <= 240 &&
       data.aboutBullet2 is string && data.aboutBullet2.size() >= 1 && data.aboutBullet2.size() <= 240 &&
@@ -145,7 +145,7 @@ service cloud.firestore {
       data.title is string && data.title.size() >= 1 && data.title.size() <= 120 &&
       data.subtitle is string && data.subtitle.size() >= 1 && data.subtitle.size() <= 120 &&
       data.shortDescription is string && data.shortDescription.size() >= 1 && data.shortDescription.size() <= 500 &&
-      data.imageUrl is string && data.imageUrl.size() <= 450000 &&
+      data.imageUrl is string && data.imageUrl.size() <= 2048 &&
       data.videoUrl is string && data.videoUrl.size() <= 2000 &&
       data.highlight1 is string && data.highlight1.size() >= 1 && data.highlight1.size() <= 200 &&
       data.highlight2 is string && data.highlight2.size() <= 200 &&
@@ -189,7 +189,7 @@ service cloud.firestore {
       data.title is string && data.title.size() >= 1 && data.title.size() <= 160 &&
       data.subtitle is string && data.subtitle.size() <= 240 &&
       data.content is string && data.content.size() >= 1 && data.content.size() <= 5000 &&
-      data.imageUrl is string && data.imageUrl.size() <= 450000 &&
+      data.imageUrl is string && data.imageUrl.size() <= 2048 &&
       data.videoUrl is string && data.videoUrl.size() <= 2000 &&
       data.isPublished is bool &&
       data.orderIndex is number && data.orderIndex >= 0 && data.orderIndex <= 1000 &&
