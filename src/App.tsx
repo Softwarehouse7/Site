@@ -444,7 +444,7 @@ export default function App() {
       : schedulePrefix;
 
     const whatsappDirectMsg = `Olá House Software! Me chamo ${name.trim()} da empresa ${company.trim()}.\nSegmento: ${selectedSegment}.\nTelefone: ${phone.trim()}.\nMensagem: ${combinedMessage}`;
-    const targetUrl = `https://wa.me/5588994357360?text=${encodeURIComponent(whatsappDirectMsg)}`;
+    const targetUrl = `https://wa.me/5588994458132?text=${encodeURIComponent(whatsappDirectMsg)}`;
 
     try {
       await setDoc(doc(db, 'contact_leads', leadId), {
@@ -1356,7 +1356,7 @@ export default function App() {
                       </p>
                       <div className="pt-2 flex flex-col sm:flex-row items-center justify-center gap-3">
                         <a
-                          href={`https://wa.me/5588994357360?text=${encodeURIComponent(
+                          href={`https://wa.me/5588994458132?text=${encodeURIComponent(
                             `Olá House Software! Me chamo ${name.trim()} (${company.trim()}). Acabei de enviar um formulário no site e gostaria de atendimento!`
                           )}`}
                           target="_blank"
