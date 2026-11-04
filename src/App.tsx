@@ -83,9 +83,9 @@ const DEFAULT_SITE_CONFIG: SiteConfigData = {
   aboutBullet1: 'Telas simples: sua equipe aprende a usar no mesmo dia.',
   aboutBullet2: '100% simplificado ideal para lojas de roupas, informática, salões e comércios',
   aboutBullet3: 'Suporte humano, rápido e sempre próximo de você.',
-  contactPhone: '(88) 99435-7360',
+  contactPhone: '(88) 99445-8132',
   contactEmail: 'house7software@gmail.com',
-  whatsappNumber: '5588994357360'
+  whatsappNumber: '5588994458132'
 };
 
 const DEFAULT_SOLUTIONS: SolutionCardData[] = [
@@ -383,7 +383,7 @@ export default function App() {
   }, [customSolutions]);
 
   const buildDynamicWhatsAppUrl = (text: string) => {
-    const num = siteConfig.whatsappNumber.replace(/\D/g, '') || '5588994357360';
+    const num = siteConfig.whatsappNumber.replace(/\D/g, '') || '5588994458132';
     return `https://wa.me/${num}?text=${encodeURIComponent(text)}`;
   };
 
@@ -1364,7 +1364,7 @@ export default function App() {
                           className="w-full sm:w-auto px-6 py-3 text-xs font-bold text-white bg-emerald-600 hover:bg-emerald-500 rounded-xl transition-all shadow-md flex items-center justify-center gap-2 cursor-pointer"
                         >
                           <MessageCircle className="w-4 h-4 shrink-0" />
-                          <span>Abrir WhatsApp Agora: (88) 99435-7360</span>
+                          <span>Abrir WhatsApp Agora: (88) 99445-8132</span>
                         </a>
 
                         <button
@@ -1473,7 +1473,7 @@ export default function App() {
                           required
                           value={phone}
                           onChange={(e) => setPhone(e.target.value)}
-                          placeholder="(11) 99876-5432"
+                          placeholder="(88) 99445-8132"
                           className="w-full px-3.5 py-2.5 text-sm bg-white border border-slate-300 rounded-lg focus:outline-none focus:border-blue-700 font-mono-tabular"
                         />
                       </div>
