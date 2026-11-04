@@ -1364,7 +1364,7 @@ export default function App() {
                           className="w-full sm:w-auto px-6 py-3 text-xs font-bold text-white bg-emerald-600 hover:bg-emerald-500 rounded-xl transition-all shadow-md flex items-center justify-center gap-2 cursor-pointer"
                         >
                           <MessageCircle className="w-4 h-4 shrink-0" />
-                          <span>Abrir WhatsApp Agora: (88) 99445-8132</span>
+                          <span>Abrir WhatsApp Agora: (88) 99411-8738</span>
                         </a>
 
                         <button
