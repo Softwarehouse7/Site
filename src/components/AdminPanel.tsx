@@ -377,7 +377,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
     setIsSaving(true);
     setStatusMsg(null);
 
-    const sanitizedWhatsapp = configForm.whatsappNumber.replace(/\D/g, '') || '5588994357360';
+    const sanitizedWhatsapp = configForm.whatsappNumber.replace(/\D/g, '') || '5588994458132';
     const path = 'site_config/main';
 
     try {
@@ -420,7 +420,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
         aboutBullet3:
           configForm.aboutBullet3.trim().slice(0, 240) ||
           'Suporte humano, rápido e sempre próximo de você.',
-        contactPhone: configForm.contactPhone.trim().slice(0, 60) || '(88) 99435-7360',
+        contactPhone: configForm.contactPhone.trim().slice(0, 60) || '(88) 99445-8132',
         contactEmail:
           configForm.contactEmail.trim().slice(0, 120) || 'house7software@gmail.com',
         whatsappNumber: sanitizedWhatsapp.slice(0, 30),
